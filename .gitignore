@@ -7,10 +7,7 @@
 *.dll
 *.so
 *.dylib
-<<<<<<< HEAD
-=======
 pokedexcli
->>>>>>> c062030 (init)
 
 # Test binary, built with `go test -c`
 *.test
