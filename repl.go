@@ -10,26 +10,10 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }
 
-func getCommands() map[string]cliCommand {
-	var supportedCommands = map[string]cliCommand{
-		"help": {
-			name:        "help",
-			description: "Displays a help message",
-			callback:    commandHelp,
-		},
-		"exit": {
-			name:        "exit",
-			description: "Exit the pokedex",
-			callback:    commandExit,
-		},
-	}
-	return supportedCommands
-}
-
-func startRepl() {
+func startRepl(conf *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
@@ -41,8 +25,8 @@ func startRepl() {
 			continue
 		}
 		cmdName := words[0]
-		if command, ok := getCommands()[cmdName]; ok {
-			err := command.callback()
+		if command, ok := conf.supportedCommands[cmdName]; ok {
+			err := command.callback(conf)
 			if err != nil {
 				fmt.Println(err)
 			}
