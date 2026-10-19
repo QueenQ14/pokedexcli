@@ -1,6 +1,16 @@
 package main
 
+import (
+	"time"
+
+	"github.com/QueenQ14/pokedexcli/internal/pokeapi"
+)
+
 func main() {
-	conf := &config{supportedCommands: getCommands()}
+	pokeClient := pokeapi.NewClient(5 * time.Second)
+	conf := &config{
+		supportedCommands: getCommands(),
+		pokeapiClient:     pokeClient,
+	}
 	startRepl(conf)
 }
