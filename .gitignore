@@ -31,8 +31,6 @@ go.work.sum
 
 # Editor/IDE
 # .idea/
-<<<<<<< HEAD
-# .vscode/
-=======
-# .vscode/
->>>>>>> c062030 (init)
+.vscode/
+.DS_Store
+repl.log
