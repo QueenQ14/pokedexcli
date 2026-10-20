@@ -10,7 +10,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func startRepl(conf *config) {
@@ -25,8 +25,9 @@ func startRepl(conf *config) {
 			continue
 		}
 		cmdName := words[0]
+		args := words[1:]
 		if command, ok := conf.supportedCommands[cmdName]; ok {
-			err := command.callback(conf)
+			err := command.callback(conf, args...)
 			if err != nil {
 				fmt.Println(err)
 			}
