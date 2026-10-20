@@ -1,6 +1,8 @@
 package main
 
-import "github.com/QueenQ14/pokedexcli/internal/pokeapi"
+import (
+	"github.com/QueenQ14/pokedexcli/internal/pokeapi"
+)
 
 type config struct {
 	supportedCommands map[string]cliCommand

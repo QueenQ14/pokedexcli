@@ -3,13 +3,21 @@ package pokeapi
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 )
 
 func (c *Client) GetLocationArea(pageURL *string) (ResponseLocationArea, error) {
-	url := baseURL + "/location-area"
+	url := baseURL + "/location-area?offset=0&limit=20"
 	if pageURL != nil {
 		url = *pageURL
+	}
+	if val, ok := c.cache.Get(url); ok {
+		var res ResponseLocationArea
+		if err := json.Unmarshal(val, &res); err != nil {
+			return ResponseLocationArea{}, err
+		}
+		return res, nil
 	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -25,8 +33,14 @@ func (c *Client) GetLocationArea(pageURL *string) (ResponseLocationArea, error) 
 		return ResponseLocationArea{}, fmt.Errorf("bad status code: %v", res.StatusCode)
 	}
 
+	rawData, err := io.ReadAll(res.Body)
+	if err != nil {
+		return ResponseLocationArea{}, err
+	}
+	c.cache.Add(url, rawData)
+
 	var data ResponseLocationArea
-	if err := json.NewDecoder(res.Body).Decode(&data); err != nil {
+	if err := json.Unmarshal(rawData, &data); err != nil {
 		return ResponseLocationArea{}, err
 	}
 	return data, nil
